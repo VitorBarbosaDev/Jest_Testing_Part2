@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-const {game} = require('../game');
+const {game,newGame,showScore,addTurn,lightsOn} = require('../game');
 
 beforeAll(() => {
     let fs = require('fs');
@@ -24,4 +24,59 @@ describe('Game object contains correct keys', () => {
     });test('choices contains correct ids', () => {
         expect(game.choices).toEqual(["button1", "button2", "button3", "button4"]);
     });
+});
+
+
+describe('newGame works Correctly', () => {
+    beforeAll(() => {
+        game.score = 42;
+        game.currentGame = ["button1", "button2"];
+        game.playerMoves = ["button1", "button2"];
+        document.getElementById("score").innerText = 42;
+        newGame();
+    });
+
+    test('sets score to 0', () => {
+        game.score = 42;
+        newGame();
+        expect(game.score).toEqual(0);
+    });
+    test('adds new random button to game.currentGame', () => {
+        newGame();
+        expect(game.currentGame.length).toBe(1);
+    });
+    test('clears playerMoves array', () => {
+        game.playerMoves = ["button1", "button2"];
+        newGame();
+        expect(game.playerMoves.length).toBe(0);
+    });
+    test('Should display 0 for the element with id of score', () => {
+        expect(document.getElementById("score").innerText).toEqual(0);
+    });
+});
+
+describe('gameplay works Correctly', () => {
+    beforeEach(() => {
+        game.score = 0;
+        game.currentGame = [];
+        game.playerMoves = [];
+        addTurn();
+    });
+
+    afterEach(() => {
+        game.score = 0;
+        game.currentGame = [];
+        game.playerMoves = [];
+    });
+
+    test('addTurn adds a new turn to the game', () => {
+        addTurn();
+        expect(game.currentGame.length).toBe(2);
+    });
+    test('should add correct class to light up the buttons', () => {
+        let button = document.getElementById(game.currentGame[0]);
+        lightsOn(game.currentGame[0]);
+        expect(button.classList).toContain("light");
+    });
+
 });
