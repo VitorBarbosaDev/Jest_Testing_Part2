@@ -2,7 +2,8 @@
  * @jest-environment jsdom
  */
 
-const {game,newGame,showScore,addTurn,lightsOn,showTurns} = require('../game');
+const {game,newGame,showScore,addTurn,lightsOn,showTurns,playerTurn} = require('../game');
+jest.spyOn(window, 'alert').mockImplementation(() => { });
 
 beforeAll(() => {
     let fs = require('fs');
@@ -92,6 +93,17 @@ describe('gameplay works Correctly', () => {
        showTurns();
        expect(game.turnNumber).toBe(0);
     } );
+    test('playerTurn should increment score if correct', () => {
+        game.playerMoves.push(game.currentGame[0]);
+        playerTurn();
+        expect(game.score).toBe(1);
+    });
+    test('should call an alert if the move is wrong', () => {
+        game.playerMoves.push("wrong");
+        playerTurn();
+        expect(window.alert).toBeCalledWith("Wrong move!");
+    })
+
 
 
 });
