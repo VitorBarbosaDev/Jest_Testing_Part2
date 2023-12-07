@@ -16,6 +16,12 @@ beforeAll(() => {
 describe('Game object contains correct keys', () => {
     test('score key exists', () => {
         expect("score" in game).toBe(true);
+    });test('last button key exists', () => {
+        expect("lastbutton" in game).toBe(true);
+    });test('turnInProgress key exists', () => {
+        expect("turnInProgress" in game).toBe(true);
+    });test('turnInProgress key is false', () => {
+        expect("turnInProgress" in game).toBe(true);
     });test('turnNumber key exists', () => {
         expect("turnNumber" in game).toBe(true);
     }); test('currentGame key exists', () => {
@@ -63,6 +69,7 @@ describe('newGame works Correctly', () => {
         }
     });
 
+
 });
 
 describe('gameplay works Correctly', () => {
@@ -103,7 +110,16 @@ describe('gameplay works Correctly', () => {
         playerTurn();
         expect(window.alert).toBeCalledWith("Wrong move!");
     })
-
+    test('Should toggle turnInProgress to be true', () => {
+        showTurns();
+        expect(game.turnInProgress).toBe(true);
+    });
+    test('Clicking during computer sequence should not register', () => {
+        showTurns();
+        game.lastButton = "";
+        document.getElementById("button2").click();
+        expect(game.lastButton).toEqual("");
+    });
 
 
 });
